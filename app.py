@@ -133,14 +133,12 @@ def execute_prompt(template, filtered_df):
 
 def main():
     st.title("Dataset Reader and Visualizer")
-
-
-
-  
-    # UI for uploading files
+    
+    # Initialize df as None to ensure it's always defined
+    df = None
+    
     uploaded_file = st.sidebar.file_uploader("Upload your file", type=["sav", "dta"])
-        
-    # Processing the uploaded file
+    
     if uploaded_file is not None:
         temp_file_path = save_uploaded_file(uploaded_file)
         if temp_file_path:
@@ -152,7 +150,6 @@ def main():
                 st.write(df)
                 display_metadata(meta)
                 
-                # Interactive UI elements for data visualization
                 variable_options = {f"{meta.column_labels[i]} ({meta.column_names[i]})": meta.column_names[i] for i in range(len(meta.column_names))}
                 x_axis_label = st.sidebar.selectbox("Choose X axis", options=list(variable_options.keys()))
                 y_axis_label = st.sidebar.selectbox("Choose Y axis", options=list(variable_options.keys()))
@@ -162,39 +159,30 @@ def main():
                 y_label = y_axis_label.split('(')[0].strip()
                 plot_data(df, x_axis, y_axis, meta, x_label, y_label)
 
-    # Check if df was successfully created from the uploaded file
+    # Now 'df' is guaranteed to be defined (though it may be None)
     if df is not None:
-        # Your existing logic for plotting data...
-        
         selected_columns = st.sidebar.multiselect("Select columns:", df.columns.tolist(), key="selected_columns")
         if selected_columns:
             filtered_df = df[selected_columns]
             
             st.sidebar.write("### Manage Prompt Templates")
-            # Safely handle template selection
-            if st.session_state.prompt_templates:
-                template_index = st.sidebar.selectbox("Choose a template", range(len(st.session_state.prompt_templates)), format_func=lambda x: st.session_state.prompt_templates[x]['name'])
-                 # Allow users to input their OpenAI API key
-                st.sidebar.write("### OpenAI API Key")
-                api_key = st.sidebar.text_input("Enter your OpenAI API key", type="password")
-                st.session_state.api_key = api_key
-                instructions = st.text_area("Instructions:", value=st.session_state.prompt_templates[template_index]['instructions'], height=100)
-                query_template = st.text_area("Query Template:", value=st.session_state.prompt_templates[template_index]['query_template'], height=100)
-                
-                # Update the session state directly
-                st.session_state.prompt_templates[template_index]['instructions'] = instructions
-                st.session_state.prompt_templates[template_index]['query_template'] = query_template
-                
-                selected_template = st.session_state.prompt_templates[template_index]
+            template_index = st.sidebar.selectbox("Choose a template", range(len(st.session_state.prompt_templates)), format_func=lambda x: st.session_state.prompt_templates[x]['name'])
+            # API key input moved here to ensure it's always accessible
+            api_key = st.sidebar.text_input("Enter your OpenAI API key", type="password", key="api_key")
+            st.session_state.api_key = api_key if api_key else st.session_state.api_key
+            
+            instructions = st.text_area("Instructions:", value=st.session_state.prompt_templates[template_index]['instructions'], height=100)
+            query_template = st.text_area("Query Template:", value=st.session_state.prompt_templates[template_index]['query_template'], height=100)
+            
+            st.session_state.prompt_templates[template_index]['instructions'] = instructions
+            st.session_state.prompt_templates[template_index]['query_template'] = query_template
+            
+            selected_template = st.session_state.prompt_templates[template_index]
 
-                if st.button("Execute Prompt with Selected Data"):
-                    response = execute_prompt(selected_template, filtered_df)
-                    st.write(response)
+            if st.button("Execute Prompt with Selected Data"):
+                response = execute_prompt(selected_template, filtered_df)
+                st.write(response)
 
-            # Debugging lines moved inside the conditional block for safety
-            if 'template_index' in locals():  # Check if template_index is defined
-                st.write(f"Current template index: {template_index}")
-                st.write("Current templates:", st.session_state.prompt_templates)
 
 if __name__ == "__main__":
     main()
