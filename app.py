@@ -134,11 +134,19 @@ def execute_prompt(template, filtered_df):
 def main():
     st.title("Dataset Reader and Visualizer")
     
-    # Initialize df as None to ensure it's always defined
+    # Initialize df outside of the conditional scopes
     df = None
-    
+
     uploaded_file = st.sidebar.file_uploader("Upload your file", type=["sav", "dta"])
     
+    # Include API key input at the start of your app to ensure it's always accessible
+    api_key_input = st.sidebar.text_input("Enter your OpenAI API key", type="password")
+
+    # Update the session state for the API key only if a new key is provided
+    if api_key_input:
+        st.session_state.api_key = api_key_input
+        
+        
     if uploaded_file is not None:
         temp_file_path = save_uploaded_file(uploaded_file)
         if temp_file_path:
@@ -160,10 +168,16 @@ def main():
                 plot_data(df, x_axis, y_axis, meta, x_label, y_label)
 
     # Now 'df' is guaranteed to be defined (though it may be None)
-    if df is not None:
-        selected_columns = st.sidebar.multiselect("Select columns:", df.columns.tolist(), key="selected_columns")
-        if selected_columns:
-            filtered_df = df[selected_columns]
+   if df is not None:
+        # Your existing logic for handling DataFrame operations...
+
+        if st.button("Execute Prompt with Selected Data"):
+            # Ensure you have selected a template and columns before attempting to execute the prompt
+            if 'selected_template' in locals() and selected_columns:
+                response = execute_prompt(selected_template, filtered_df)
+                st.write(response)
+            else:
+                st.error("Please select a template and columns before executing.")
             
             st.sidebar.write("### Manage Prompt Templates")
             template_index = st.sidebar.selectbox("Choose a template", range(len(st.session_state.prompt_templates)), format_func=lambda x: st.session_state.prompt_templates[x]['name'])
