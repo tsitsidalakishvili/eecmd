@@ -2,7 +2,6 @@ import tempfile
 import plotly.express as px
 import openai
 import streamlit as st
-import fitz
 import pdfplumber
 import numpy as np
 from io import BytesIO
