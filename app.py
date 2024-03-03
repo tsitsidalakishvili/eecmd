@@ -407,7 +407,7 @@ def main():
     if openai_api_key:
         langchain_llm = OpenAI(api_key=openai_api_key)
     else:
-        st.error("Please enter your OpenAI API key to proceed.")
+        st.info("Please enter your OpenAI API key to proceed.")
         st.stop()
     
     st.write("### Select a Prompt Template")
