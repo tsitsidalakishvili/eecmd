@@ -8,6 +8,7 @@ from io import BytesIO
 from langchain.document_loaders import UnstructuredPDFLoader, PyPDFLoader, AssemblyAIAudioTranscriptLoader
 import requests
 import pandas as pd
+from langchain.memory import ConversationBufferMemory
 
 import os
 from dotenv import load_dotenv
