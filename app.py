@@ -17,7 +17,6 @@ from langchain.memory import ConversationBufferMemory
 from PyPDF2 import PdfReader
 import streamlit_scrollable_textbox as stx
 import layoutparser as lp
-from rapidocr_onnxruntime import RapidOCR
 import re
 import pyreadstat
 from neo4j import GraphDatabase
