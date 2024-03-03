@@ -91,20 +91,7 @@ class UnstructuredPDFReader:
 
         return text_content
 
-class PDFPlumberTextExtractor:
-    def __init__(self, pdf_bytes):
-        self.pdf_bytes = pdf_bytes
 
-    def extract_text(self):
-        pdf_file = BytesIO(self.pdf_bytes)
-        pdf = pdfplumber.open(pdf_file)
-        text_content = []
-
-        for page in pdf.pages:
-            text = page.extract_text()
-            text_content.append(text)
-
-        return text_content
 
 
 
