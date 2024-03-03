@@ -9,6 +9,7 @@ frontend
 opencv_python==4.9.0.80
 opencv_python_headless==3.4.18.65
 pandas==1.3.5
+static
 pdfplumber==0.10.3
 plotly==5.9.0
 PyPDF2==3.0.1
