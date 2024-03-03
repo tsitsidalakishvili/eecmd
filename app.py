@@ -10,7 +10,6 @@ import requests
 import pandas as pd
 
 import os
-import fitz
 from dotenv import load_dotenv
 from langchain.chains import ConversationChain, GraphCypherQAChain
 from langchain.chat_models import ChatOpenAI
@@ -71,25 +70,6 @@ if 'data' not in st.session_state:
 
 
 
-class RapidOCRTextExtractor:
-    def __init__(self, pdf_bytes):
-        self.pdf_bytes = pdf_bytes
-        self.engine = RapidOCR()  # Initialize the RapidOCR engine
-
-    def extract_text(self):
-        # Convert PDF bytes to images and then extract text using RapidOCR
-        doc = fitz.open(stream=self.pdf_bytes, filetype="pdf")
-        text_content = []
-
-        for page_num in range(len(doc)):
-            page = doc[page_num]
-            pix = page.get_pixmap()
-            image = cv2.imdecode(np.frombuffer(pix.tobytes(), np.uint8), cv2.IMREAD_COLOR)
-            result, _ = self.engine(image)  # Use RapidOCR for text extraction
-            page_text = ' '.join([res[1] for res in result])
-            text_content.append(page_text)
-
-        return text_content
 
 class UnstructuredPDFReader:
     def __init__(self, pdf_bytes, extract_images=True, mode="elements"):
@@ -126,20 +106,8 @@ class PDFPlumberTextExtractor:
 
         return text_content
 
-class PyMuPDFTextExtractor:
-    def __init__(self, pdf_bytes):
-        self.pdf_bytes = pdf_bytes
 
-    def extract_text(self):
-        doc = fitz.open(stream=self.pdf_bytes, filetype="pdf")
-        text_content = []
 
-        for page_num in range(len(doc)):
-            page = doc[page_num]
-            text = page.get_text()
-            text_content.append(text)
-
-        return text_content
 
 def extract_text(pdf_bytes, extraction_method):
     if extraction_method == "Unstructured PDFLoader":
