@@ -24,6 +24,13 @@ import pyreadstat
 from neo4j import GraphDatabase
 from langchain.llms import OpenAI
 from langchain.graphs import Neo4jGraph
+import os
+
+# Check if the static directory exists, if not, create it
+static_directory = "static"
+if not os.path.exists(static_directory):
+    os.makedirs(static_directory)
+
 
 # Initialize the session state for the API key if it's not already set
 if 'api_key' not in st.session_state:
