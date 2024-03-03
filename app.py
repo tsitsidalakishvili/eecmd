@@ -10,6 +10,7 @@ import requests
 import pandas as pd
 import cv2
 import os
+import fitz
 from dotenv import load_dotenv
 from langchain.chains import ConversationChain, GraphCypherQAChain
 from langchain.chat_models import ChatOpenAI
