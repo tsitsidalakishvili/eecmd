@@ -522,12 +522,12 @@ def main():
                 "tooltip": tooltip_text
             })
 
-        view_state = pdk.ViewState(latitude=population_df['lat'].mean(), longitude=population_df['lng'].mean(), zoom=5)
+        view_state = pdk.ViewState(latitude=population_df['lat'].mean(), longitude=population_df['lng'].mean(), zoom=8)
         layer = pdk.Layer('ScatterplotLayer',
                           deck_gl_data,
                           get_position='position',
                           get_color='[180, 0, 200, 160]',
-                          get_radius=2000,
+                          get_radius=5000,
                           pickable=True)
         st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip={"html": "{tooltip}", "style": {"color": "white"}}))
 
