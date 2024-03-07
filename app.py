@@ -522,7 +522,7 @@ def main():
                 "tooltip": tooltip_text
             })
 
-        view_state = pdk.ViewState(latitude=population_df['lat'].mean(), longitude=population_df['lng'].mean(), zoom=8)
+        view_state = pdk.ViewState(latitude=population_df['lat'].mean(), longitude=population_df['lng'].mean(), zoom=6)
         layer = pdk.Layer('ScatterplotLayer',
                           deck_gl_data,
                           get_position='position',
