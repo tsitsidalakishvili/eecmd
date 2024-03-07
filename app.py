@@ -527,7 +527,7 @@ def main():
                           deck_gl_data,
                           get_position='position',
                           get_color='[180, 0, 200, 160]',
-                          get_radius=20000,
+                          get_radius=2000,
                           pickable=True)
         st.pydeck_chart(pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip={"html": "{tooltip}", "style": {"color": "white"}}))
 
